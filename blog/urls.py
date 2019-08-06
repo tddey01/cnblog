@@ -3,7 +3,9 @@
 
 from django.urls import path
 from django.urls import re_path
+from blog import views
 
 urlpatterns = [
+    path('login/', views.login),
 
 ]
