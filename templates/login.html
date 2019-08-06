@@ -18,7 +18,21 @@
                 <label for="pwd">密码</label>
                 <input type="password" id="pwd" class="form-control">
             </div>
-            <input type="button" class="btn btn-default login_btn btn-primary  pull-right form-group" value="submit">
+
+            <div class="form-group">
+                <label for="pwd">验证码</label>
+                <div class="row">              {#  图形验证码#}
+                    <div class="col-md-6">
+                        <input type="text" class="valid_code form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <img  width="200" height="40" src="/blog/get_validCode.img" alt="">
+                    </div>
+                </div>
+            </div>
+
+
+            <input type="button" class="btn btn-default login_btn  btn-primary  pull-right " value="submit">
         </form>
     </div>
 </div>
