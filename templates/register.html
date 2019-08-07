@@ -12,7 +12,8 @@
         #avatar {
             display: none;
         }
-        .error{
+
+        .error {
             color: red;
         }
     </style>
@@ -27,7 +28,7 @@
             {% for field in form %}
                 <div class="form-group">
                     <label for="{{ field.auto_id }}">{{ field.label }}</label>
-                    {{ field }}
+                    {{ field }} <span class="error pull-right"></span>
                 </div>
             {% endfor %}
 
@@ -36,11 +37,10 @@
                     头像
                     <img id="avatar_img" width="60" height="60" src="/static/blog/img/default.png" alt="">
                 </label>
-                <input type="file" id="avatar">
+                <input type="file" id="avatar" >
             </div>
 
-            <input type="button" class="btn btn-default login_btn  btn-primary  pull-right " value="注册"> <span
-                class="error"></span>
+            <input type="button" class="btn btn-default reg_btn  btn-primary  pull-right " value="注册"> <span class="error"></span>
         </form>
     </div>
 </div>
@@ -60,8 +60,34 @@
             $("#avatar_img").attr("src", reader.result)
         }
 
-    })
+    });
 
+
+    //基于 ajax提交数据
+    $(".reg_btn").click(function () {
+        var formdata = new FormData();
+        formdata.append("user", $("#id_user").val());
+        formdata.append("pwd", $("#id_pwd").val());
+        formdata.append("re_pwd", $("#id_re_pwd").val());
+        formdata.append("email", $("#id_email").val());
+        formdata.append("avatar", $("#avatar")[0].files[0]);
+        formdata.append("csrfmiddlewaretoken", $("[name='csrfmiddlewaretoken']").val());
+
+
+        $.ajax(
+            {
+                url: "",
+                type: "post",
+                contentType: false,
+                processData: false,
+                data: formdata,
+                success: function (data) {
+                    console.log(data)
+
+                }
+            }
+        )
+    });
 
 </script>
 
