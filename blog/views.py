@@ -1,6 +1,7 @@
 from django.shortcuts import HttpResponse
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.contrib import auth
 
 
 # Create your views here.
@@ -12,12 +13,19 @@ def login(request):
         user = request.POST.get("user")
         pwd = request.POST.get('pwd')
         valid_code = request.POST.get('valid_code')
-
+        print(request.POST)
         valid_code_srt = request.session.get("valid_code_str")
         if valid_code.upper() == valid_code_srt.upper():
-            pass
+            user = auth.authenticate(username=user,password=pwd)
+            if user:
+                auth.login(request,user)                # request.user == 当前登录对象
+                response["user"] = user.username
+            else:
+                # response['msg']="username or password error"
+                response['msg']="用户名 或 密码 错误 请重新输入"
         else:
-            response["msg"]="valid code error"
+            response["msg"]="验证码错误 请重新输入"
+            # response["msg"]="valid code error"
 
         return JsonResponse(response)
     return render(request, 'login.html')
@@ -103,3 +111,9 @@ def get_validCode_img(request):
     img.save(f, 'png')
     data = f.getvalue()
     return HttpResponse(data)
+
+
+def index(request):
+
+
+    return  render(request,'index.html')

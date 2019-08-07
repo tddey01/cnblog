@@ -33,7 +33,7 @@
             </div>
 
 
-            <input type="button" class="btn btn-default login_btn  btn-primary  pull-right " value="subimt">
+            <input type="button" class="btn btn-default login_btn  btn-primary " value="subimt"> <span class="error"></span>
         </form>
     </div>
 </div>
@@ -59,6 +59,11 @@
                   success:function (data) {
                         console.log(data)
 
+                      if (data.user){
+                          location.href = "/blog/index/"
+                      } else {
+                          $(".error").text(data.msg).css({"color":"red","margin-left":"10px"})
+                      }
 
                   }
                 }

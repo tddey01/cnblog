@@ -8,5 +8,7 @@ from blog import views
 urlpatterns = [
     path('login/', views.login),
     path('get_validCode.img',views.get_validCode_img),
+    path('index/',views.index),
+
 
 ]
