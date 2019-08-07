@@ -10,6 +10,7 @@
 <div class="container">
     <div class="col-md-6 col-lg-offset-3">
         <form action="" method="post">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="user">用户名</label>
                 <input type="text" id="user" class="form-control">
@@ -23,25 +24,47 @@
                 <label for="pwd">验证码</label>
                 <div class="row">              {#  图形验证码#}
                     <div class="col-md-6">
-                        <input type="text" class="valid_code form-control">
+                        <input type="text" id="valid_code" class="form-control">
                     </div>
                     <div class="col-md-6">
-                        <img  width="200" height="40" id="valid_code_img" src="/blog/get_validCode.img" alt="">
+                        <img width="200" height="40" id="valid_code_img" src="/blog/get_validCode.img" alt="">
                     </div>
                 </div>
             </div>
 
 
-            <input type="button" class="btn btn-default login_btn  btn-primary  pull-right " value="提交">
+            <input type="button" class="btn btn-default login_btn  btn-primary  pull-right " value="subimt">
         </form>
     </div>
 </div>
 <script src="/static/js/jquery-3.4.1.min.js"></script>
 <script>
-    // 刷新验证码
+    {#// 刷新验证码#}
     $("#valid_code_img").click(function () {
-        $(this)[0].src+="?"
-    })
+        $(this)[0].src += ""
+    });
+
+    {#//登录验证#}
+    $(".login_btn").click(function () {
+            $.ajax(
+                {
+                    url: "",
+                    type: "post",
+                    data: {
+                        user: $("#user").val(),
+                        pwd: $("#pwd").val(),
+                        valid_code: $("#valid_code").val(),
+                        csrfmiddlewaretoken:$("[name='csrfmiddlewaretoken']").val(),  //token 验证值
+                    },
+                  success:function (data) {
+                        console.log(data)
+
+
+                  }
+                }
+            )
+        }
+    );
 </script>
 </body>
 </html>
