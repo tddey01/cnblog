@@ -26,7 +26,7 @@
                         <input type="text" class="valid_code form-control">
                     </div>
                     <div class="col-md-6">
-                        <img  width="200" height="40" src="/blog/get_validCode.img" alt="">
+                        <img  width="200" height="40" id="valid_code_img" src="/blog/get_validCode.img" alt="">
                     </div>
                 </div>
             </div>
@@ -36,6 +36,12 @@
         </form>
     </div>
 </div>
-
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+<script>
+    // 刷新验证码
+    $("#valid_code_img").click(function () {
+        $(this)[0].src+="?"
+    })
+</script>
 </body>
 </html>

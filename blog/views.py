@@ -69,6 +69,7 @@ def get_validCode_img(request):
         draw.arc((x,y,x + 4,y + 4),0 , 90,fill = get_random_color() )
     '''
 
+
     f = BytesIO()
     img.save(f, 'png')
     data = f.getvalue()
