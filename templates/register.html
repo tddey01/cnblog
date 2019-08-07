@@ -2,10 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>register</title>
+    <title>login</title>
     <link rel="stylesheet" href="/static/blog/css/bootstrap.min.css">
 </head>
 <body>
+<h3>登录页面</h3>
+<div class="container">
+    <div class="col-md-6 col-lg-offset-3">
+        <form action="" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="user">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <div class="form-group">
+                <label for="avatar">头像</label>
+                <input type="file">
+            </div>
+
+            <input type="button" class="btn btn-default login_btn  btn-primary  pull-right " value="注册"> <span class="error"></span>
+        </form>
+    </div>
+</div>
+<script src="/static/js/jquery-3.4.1.min.js"></script>
+
 
 </body>
 </html>
