@@ -33,7 +33,9 @@
             </div>
 
 
-            <input type="button" class="btn btn-default login_btn  btn-primary " value="subimt"> <span class="error"></span>
+            <input type="button" class="btn btn-default login_btn  btn-primary " value="subimt"> <span
+                class="error"></span>
+            <a href="/blog/register/" class="btn pull-right btn-success">注册</a>
         </form>
     </div>
 </div>
@@ -54,18 +56,21 @@
                         user: $("#user").val(),
                         pwd: $("#pwd").val(),
                         valid_code: $("#valid_code").val(),
-                        csrfmiddlewaretoken:$("[name='csrfmiddlewaretoken']").val(),  //token 验证值
+                        csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),  //token 验证值
                     },
-                  success:function (data) {
+                    success: function (data) {
                         console.log(data)
 
-                      if (data.user){
-                          location.href = "/blog/index/"
-                      } else {
-                          $(".error").text(data.msg).css({"color":"red","margin-left":"10px"})
-                      }
+                        if (data.user) {
+                            location.href = "/blog/index/"
+                        } else {
+                            $(".error").text(data.msg).css({"color": "red", "margin-left": "10px"})
+                            setTimeout(function () {                //超时时间 报错信息
+                                $(".error").text()
+                            },10)
+                        }
 
-                  }
+                    }
                 }
             )
         }
