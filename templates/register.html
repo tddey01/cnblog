@@ -5,12 +5,15 @@
     <title>login</title>
     <link rel="stylesheet" href="/static/blog/css/bootstrap.min.css">
     <style type="text/css">
-        #avatar_img{
+        #avatar_img {
             margin-left: 20px;
         }
 
-        #avatar{
+        #avatar {
             display: none;
+        }
+        .error{
+            color: red;
         }
     </style>
 </head>
@@ -20,18 +23,20 @@
     <div class="col-md-6 col-lg-offset-3">
         <form action="" method="post">
             {% csrf_token %}
+
             {% for field in form %}
                 <div class="form-group">
                     <label for="{{ field.auto_id }}">{{ field.label }}</label>
                     {{ field }}
                 </div>
             {% endfor %}
+
             <div class="form-group">
                 <label for="avatar">
                     头像
                     <img id="avatar_img" width="60" height="60" src="/static/blog/img/default.png" alt="">
                 </label>
-                <input type="file" id="avatar" >
+                <input type="file" id="avatar">
             </div>
 
             <input type="button" class="btn btn-default login_btn  btn-primary  pull-right " value="注册"> <span
@@ -40,7 +45,25 @@
     </div>
 </div>
 <script src="/static/js/jquery-3.4.1.min.js"></script>
+<script>
+    $("#avatar").change(function () {
+        {#alert(123)#}
+        //获取用户选中的文件对象
+        var file_obj = $(this)[0].files[0];
 
+        // 获取文件对象的路径
+        var reader = new FileReader();
+        reader.readAsDataURL(file_obj);
+
+        //修改 img 的 src 属性 src = 文件对象的路径
+        reader.onload = function () {
+            $("#avatar_img").attr("src", reader.result)
+        }
+
+    })
+
+
+</script>
 
 </body>
 </html>
