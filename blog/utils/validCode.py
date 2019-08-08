@@ -53,6 +53,7 @@ def get_valid_code_img(request):
 
     print("valid_code_str", valid_code_str)
     request.session['valid_code_str'] = valid_code_str
+
     '''
     # draw.line() #画线
     # draw.point()  # 画点

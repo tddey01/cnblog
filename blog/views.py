@@ -32,6 +32,7 @@ def login(request):
 
 
 def get_validCode_img(request):
+
     # import random
     # def get_random_color():
     #     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255),)
@@ -110,6 +111,7 @@ def get_validCode_img(request):
     # f = BytesIO()
     # img.save(f, 'png')
     # data = f.getvalue()
+
     from blog.utils.validCode import get_valid_code_img
     data = get_valid_code_img(request)
     return HttpResponse(data)
@@ -153,8 +155,10 @@ def register(request):
             pwd = form.cleaned_data.get("pwd")
             email = form.cleaned_data.get("email")
             avatar_obj = request.FILES.get("avatar")
-            user_obj = UserInfo.objects.create_user(username=users,password=pwd,email=email,avatar=avatar_obj)
-
+            if avatar_obj:
+                user_obj = UserInfo.objects.create_user(username=users,password=pwd,email=email,avatar=avatar_obj)
+            else:
+                user_obj = UserInfo.objects.create_user(username=users, password=pwd, email=email,)
         else:
             print(form.cleaned_data)
             print(form.errors)
