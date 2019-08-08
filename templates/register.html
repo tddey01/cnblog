@@ -106,8 +106,12 @@
                         $.each(data.msg,function(field,error_list) {
                             console.log(field,error_list);
 
+                            if (field == "__all__"){
+                                $("#id_re_pwd").next().html(error_list[0]).parent().addClass("has-error");
+                            }
                             $("#id_"+field).next().html(error_list[0]);
-                            $("#id_"+field).parent().addClass("has-error")   //报错异常边框提示
+                            $("#id_"+field).parent().addClass("has-error");   //报错异常边框提示
+
                         })
                     }
 

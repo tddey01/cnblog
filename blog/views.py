@@ -119,6 +119,7 @@ def index(request):
     return render(request, 'index.html')
 
 
+'''
 from django import forms
 from django.forms import widgets
 
@@ -128,7 +129,10 @@ class UserForm(forms.Form):
     pwd = forms.CharField(max_length=32, label="密码", widget=widgets.PasswordInput(attrs={'class':'form-control'}),)
     re_pwd = forms.CharField(max_length=32, label="确认密码",  widget=widgets.PasswordInput(attrs={'class':'form-control'}))
     email = forms.EmailField(max_length=32, label="邮箱地址", widget=widgets.EmailInput(attrs={'class':'form-control'}))
+'''
 
+
+from blog.myforms import UserForm
 
 def register(request):
 
