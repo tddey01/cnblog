@@ -133,7 +133,7 @@ class UserForm(forms.Form):
 
 
 from blog.myforms import UserForm
-
+from blog.models import UserInfo
 def register(request):
 
     if request.is_ajax():
@@ -145,7 +145,15 @@ def register(request):
         respones = {'user':None,'msg':None}
 
         if form.is_valid():
-            respones['msg'] = form.cleaned_data.get('user')
+            respones['user'] = form.cleaned_data.get('user')
+
+            # 生成一条用户记录
+            users = form.cleaned_data.get("user")
+
+            pwd = form.cleaned_data.get("pwd")
+            email = form.cleaned_data.get("email")
+            avatar_obj = request.FILES.get("avatar")
+            user_obj = UserInfo.objects.create_user(username=users,password=pwd,email=email,avatar=avatar_obj)
 
         else:
             print(form.cleaned_data)

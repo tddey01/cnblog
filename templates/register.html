@@ -96,6 +96,7 @@
                     {#console.log(data)#}
                     if(data.user){
                         //注册成功
+                        location.href = "/blog/login/"
                     }else {
                         //注册失败
                         {#console.log(data.msg)#}
