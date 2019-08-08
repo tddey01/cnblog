@@ -28,7 +28,7 @@
             {% for field in form %}
                 <div class="form-group">
                     <label for="{{ field.auto_id }}">{{ field.label }}</label>
-                    {{ field }} <span class="error pull-right">{{ field.errors.0 }}</span>
+                    {{ field }} <span class="error pull-right"></span>
                 </div>
             {% endfor %}
 
@@ -66,7 +66,7 @@
 
     //基于 ajax提交数据
     $(".reg_btn").click(function () {
-        console.log($("#form").serializeArray())
+        {#console.log($("#form").serializeArray())#}
         var formdata = new FormData();
 
         var request_data = $("#form").serializeArray();
@@ -93,7 +93,20 @@
                 processData: false,
                 data: formdata,
                 success: function (data) {
-                    console.log(data)
+                    {#console.log(data)#}
+                    if(data.user){
+                        //注册成功
+                    }else {
+                        //注册失败
+                        {#console.log(data.msg)#}
+
+                        $.each(data.msg,function(field,error_list) {
+                            console.log(field,error_list)
+                            $("#id_"+field).next().html(error_list)
+                        })
+                    }
+
+
 
                 }
             }
