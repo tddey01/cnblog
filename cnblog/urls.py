@@ -16,8 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
+from django.urls import re_path
+from django.views.static import serve
+from cnblog import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/',include('blog.urls')),
+
+    # media 配置
+    re_path(r"media/(?P<path>.*)$",serve,{"document_root":settings.MEDIA_ROOT}),   #http://127.0.0.1:8000/media/avatars/network.png
 ]

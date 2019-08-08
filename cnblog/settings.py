@@ -151,6 +151,10 @@ LOGGING = {
 }
 
 
-# 配置 media_root
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media') # 配置 media_root
+
+# 客户端访问 MEDIA_URL 路径
+
+MEDIA_URL = "/media/"
