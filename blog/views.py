@@ -3,17 +3,25 @@ from django.http import JsonResponse
 from django.shortcuts import HttpResponse
 from django.shortcuts import render
 
+from blog.models import UserInfo
+from blog.myforms import UserForm
+
 
 # Create your views here.
 
 def login(request):
+    '''
+    登录验证
+    :param request:
+    :return:
+    '''
     if request.method == "POST":
         response = {"user": None, "msg": None}
 
         user = request.POST.get("user")
         pwd = request.POST.get('pwd')
         valid_code = request.POST.get('valid_code')
-        print(request.POST)
+        # print(request.POST)
         valid_code_srt = request.session.get("valid_code_str")
         if valid_code.upper() == valid_code_srt.upper():
             user = auth.authenticate(username=user, password=pwd)
@@ -32,7 +40,6 @@ def login(request):
 
 
 def get_validCode_img(request):
-
     # import random
     # def get_random_color():
     #     return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255),)
@@ -134,17 +141,18 @@ class UserForm(forms.Form):
 '''
 
 
-from blog.myforms import UserForm
-from blog.models import UserInfo
-def register(request):
+# from blog.myforms import UserForm
+# from blog.models import UserInfo
 
+
+def register(request):
     if request.is_ajax():
 
-        print(request.POST)
+        # print(request.POST)
 
         form = UserForm(request.POST)
 
-        respones = {'user':None,'msg':None}
+        respones = {'user': None, 'msg': None}
 
         if form.is_valid():
             respones['user'] = form.cleaned_data.get('user')
@@ -155,13 +163,23 @@ def register(request):
             pwd = form.cleaned_data.get("pwd")
             email = form.cleaned_data.get("email")
             avatar_obj = request.FILES.get("avatar")
+            extra = {}
+
+            if avatar_obj:
+                extra['avatar'] = avatar_obj
+
+            UserInfo.objects.create_user(username=users, password=pwd, email=email, *extra)
+
+            '''
             if avatar_obj:
                 user_obj = UserInfo.objects.create_user(username=users,password=pwd,email=email,avatar=avatar_obj)
             else:
                 user_obj = UserInfo.objects.create_user(username=users, password=pwd, email=email,)
+            '''
+
         else:
-            print(form.cleaned_data)
-            print(form.errors)
+            #     print(form.cleaned_data)
+            #     print(form.errors)
 
             respones['msg'] = form.errors
 
