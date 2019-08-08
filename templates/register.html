@@ -99,10 +99,15 @@
                     }else {
                         //注册失败
                         {#console.log(data.msg)#}
-
+                        //清空错误信息
+                        $("span.error").html("");
+                        $(".form-group").removeClass("has-error");   //清空边框样式
+                        //展此次提交的错误信息
                         $.each(data.msg,function(field,error_list) {
-                            console.log(field,error_list)
-                            $("#id_"+field).next().html(error_list)
+                            console.log(field,error_list);
+
+                            $("#id_"+field).next().html(error_list[0]);
+                            $("#id_"+field).parent().addClass("has-error")   //报错异常边框提示
                         })
                     }
 
