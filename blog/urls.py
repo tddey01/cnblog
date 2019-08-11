@@ -11,6 +11,7 @@ urlpatterns = [
     path('index/',views.index),
     re_path('^$', views.index),
     path('register/',views.register),
+    path('logout/', views.logout),
 
 
 ]

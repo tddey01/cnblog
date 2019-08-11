@@ -2,9 +2,11 @@ from django.contrib import auth
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse
 from django.shortcuts import render
+from django.shortcuts import redirect
 
 from blog.models import UserInfo
 from blog.myforms import UserForm
+
 
 
 # Create your views here.
@@ -187,3 +189,8 @@ def register(request):
 
     form = UserForm()
     return render(request, 'register.html', {'form': form})
+
+
+def  logout(request):
+    auth.logout(request)  # 等同于执行 request.session.flush() 这个函数模块
+    return redirect( "/blog/login/")
