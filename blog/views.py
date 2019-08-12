@@ -172,6 +172,7 @@ def register(request):
 
             # UserInfo.objects.create_user(username=users, password=pwd, email=email, *extra)
             UserInfo.objects.create_user(username=users,password=pwd,email=email,*extra)
+
             '''
             if avatar_obj:
                 user_obj = UserInfo.objects.create_user(username=users,password=pwd,email=email,avatar=avatar_obj)
@@ -180,6 +181,7 @@ def register(request):
             '''
 
         else:
+
             #     print(form.cleaned_data)
             #     print(form.errors)
 
