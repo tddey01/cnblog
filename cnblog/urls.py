@@ -19,11 +19,17 @@ from django.urls import include
 from django.urls import re_path
 from django.views.static import serve
 from cnblog import settings
-
+from blog import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/',include('blog.urls')),
-
+    path('login/', views.login),
+    path('get_validCode.img', views.get_validCode_img),
+    path('index/', views.index),
+    re_path('^$', views.index),
+    path('register/', views.register),
+    path('logout/', views.logout),
+    re_path('^(?P<username>\w+)/$', views.home_site),
     # media 配置
     re_path(r"media/(?P<path>.*)$",serve,{"document_root":settings.MEDIA_ROOT}),   #http://127.0.0.1:8000/media/avatars/network.png
 ]

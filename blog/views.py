@@ -1,15 +1,15 @@
 from django.contrib import auth
 from django.http import JsonResponse
-from django.shortcuts import HttpResponse
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import HttpResponse, redirect, render
 
+from blog import models
 from blog.models import UserInfo
 from blog.myforms import UserForm
-
+from blog.utils import validCode
 
 
 # Create your views here.
+
 
 def login(request):
     '''
@@ -121,13 +121,13 @@ def get_validCode_img(request):
     # img.save(f, 'png')
     # data = f.getvalue()
 
-    from blog.utils.validCode import get_valid_code_img
-    data = get_valid_code_img(request)
+    data = validCode.get_valid_code_img(request)
     return HttpResponse(data)
 
 
 def index(request):
-    return render(request, 'index.html')
+    article_list = models.Article.objects.all()
+    return render(request, 'index.html', {"article_list": article_list})
 
 
 '''
@@ -171,7 +171,7 @@ def register(request):
                 extra['avatar'] = avatar_obj
 
             # UserInfo.objects.create_user(username=users, password=pwd, email=email, *extra)
-            UserInfo.objects.create_user(username=users,password=pwd,email=email,*extra)
+            UserInfo.objects.create_user(username=users, password=pwd, email=email, *extra)
 
             '''
             if avatar_obj:
@@ -193,6 +193,30 @@ def register(request):
     return render(request, 'register.html', {'form': form})
 
 
-def  logout(request):
+def logout(request):
     auth.logout(request)  # 等同于执行 request.session.flush() 这个函数模块
-    return redirect( "/blog/login/")
+    return redirect("/blog/login/")
+
+
+def home_site(request, username):
+    '''
+    个人站点 视图函数
+    :param request:
+    :return:
+    '''
+    print('username', username)
+    user = UserInfo.objects.filter(username=username).exists()
+    if not user:  # 判断用户是否存在
+        return render(request, "not_found.html")
+
+    # 查询当前站点对象
+
+    blog = user.blog
+    # 当前用户或者当前站点对应的所有文章 过滤出来
+    # 基于对象查询
+    # article_list = user.article_set.all
+    # 基于双线划线查询
+    models.Article.objects.filter(user=user)
+
+
+    return render(request, "home_site.html")
