@@ -1,4 +1,5 @@
 from django.contrib import auth
+from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse, redirect, render
 
@@ -6,8 +7,6 @@ from blog import models
 from blog.models import UserInfo
 from blog.myforms import UserForm
 from blog.utils import validCode
-
-from django.db.models import Count
 
 
 # Create your views here.
@@ -200,12 +199,14 @@ def logout(request):
     return redirect("/blog/login/")
 
 
-def home_site(request, username):
+def home_site(request, username,**kwargs):
     '''
     个人站点 视图函数
     :param request:
     :return:
     '''
+
+    print("kwargs", kwargs)
     print('username', username)
     user = UserInfo.objects.filter(username=username).first()
     if not user:  # 判断用户是否存在
@@ -216,10 +217,16 @@ def home_site(request, username):
     blog = user.blog
     # 当前用户或者当前站点对应的所有文章 过滤出来
     # 基于对象查询
-    # article_list = user.article_set.all
+    # article_list = user.article_set.all()
     # 基于双线划线查询
-    models.Article.objects.filter(user=user)
+    # models.Article.objects.filter(user=user)
 
+    if  kwargs:
+        condition = kwargs.get("condition")
+        param = kwargs.get("param")
+        article_list = models.Article.objects.filter(user=user)
+    else:
+        article_list = models.Article.objects.filter(user=user)
     # 每一个后的表模型.objects.values("pk").annotate(聚合函数(关联表__统计字段)).values("表模型的所有字段以及统计字段")
 
     # 查询每一个分类名称以及对应的文章数
@@ -239,18 +246,20 @@ def home_site(request, username):
 
     # 查询当前站点每一个年月的名称以及对应的文章数
 
-    # ret=models.Article.objects.extra(select={"is_recent":"create_time > '2018-09-05'"}).values("title","is_recent")
-    # print(ret)
+    ret=models.Article.objects.extra(select={"is_recent":"create_time > '2018-09-05'"}).values("title","is_recent")
+    print(ret)
 
     # 方式1:
-    # date_list=models.Article.objects.filter(user=user).extra(select={"y_m_date":"date_format(create_time,'%%Y/%%m')"}).values("y_m_date").annotate(c=Count("nid")).values_list("y_m_date","c")
-    # print(date_list)
+    date_list=models.Article.objects.filter(user=user).extra(select={"y_m_date":"date_format(create_time,'%%Y/%%m')"}).values("y_m_date").annotate(c=Count("nid")).values_list("y_m_date","c")
+    print(date_list)
 
     # 方式2:
-
-    # from django.db.models.functions import TruncMonth
     #
-    # ret=models.Article.objects.filter(user=user).annotate(month=TruncMonth("create_time")).values("month").annotate(c=Count("nid")).values_list("month","c")
-    # print("ret----->",ret)
+    from django.db.models.functions import TruncMonth
 
-    return render(request, "home_site.html")
+    # ret=models.Article.objects.filter(user=user).annotate(month=TruncMonth("create_time")).values("month").annotate(c=Count("nid")).values_list("month","c")
+    ret = models.Article.objects.first(user=user).annotate(month=TruncMonth("create_time")).values("month").annotate(c=Count("nid")).values_list("month","c")
+    print("ret----->",ret)
+
+
+    return render(request, "home_site.html",{"blog":blog,"article_list":article_list},)
