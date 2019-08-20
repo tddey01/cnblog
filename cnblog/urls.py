@@ -33,10 +33,11 @@ urlpatterns = [
     path('logout/', views.logout),
 
 
+
     # media 配置
     re_path(r"media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
     # http://127.0.0.1:8000/media/avatars/network.png
-
+    re_path('^(?P<username>\w+)/articles/(?P<articel_id>\d+)$', views.article_detail),
     # 个人站点跳转
     re_path('^(?P<username>\w+)/(?P<condition>tag|category|archives)/(?P<param>.*)/$', views.home_site),
 
