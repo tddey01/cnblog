@@ -272,12 +272,41 @@ def home_site(request, username, **kwargs):
     # # print("ret----->",ret)
 
     # return render(request, "home_site.html", {"username": username, "blog": blog, "article_list": article_list, 'data_list': date_list}, )
-    return render(request, "home_site.html",{"username": username, "blog": blog, "article_list": article_list,}, )
+    return render(request, "home_site.html", {"username": username, "blog": blog, "article_list": article_list, }, )
 
 
 def article_detail(request, username, articel_id):
     user = UserInfo.objects.filter(username=username).first()
     blog = user.blog
-    article_obj =models.Article.objects.filter(pk=articel_id).first()
+    article_obj = models.Article.objects.filter(pk=articel_id).first()
 
-    return render(request, "article_detail.html",locals())
+    return render(request, "article_detail.html", locals())
+
+
+# 点赞试图函数
+import json
+from django.db.models import F
+from django.http import JsonResponse
+
+def digg(request):
+    print(request.POST)
+
+    article_id = request.POST.get("article_id")
+    # is_up = request.POST.get('is_up')  # 字符串 true
+    is_up = json.loads(request.POST.get("is_up"))
+    user_id = request.user.pk
+    response = {"state":True}
+    obj = models.ArticleUpDown.objects.filter(user_id=user_id, article_id=article_id).first()
+    if not obj:
+        queryset = models.Article.objects.filter(pk=article_id)
+        ard = models.ArticleUpDown.objects.create(user_id=user_id, article_id=article_id, is_up=is_up)
+        if is_up:
+            queryset.update(up_count=F("up_count") + 1)
+        else:
+            queryset.update(down_count=F("down_count") + 1)
+    else:
+        response["state"] = False
+        response["handled"] = obj.is_up
+
+
+    return JsonResponse(response)

@@ -1,25 +1,53 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% csrf_token %}
     <div class="article_info">
         <h4 class="text-center">{{ article_obj.title }}</h4>
         <div class="cont">
             {{ article_obj.content |safe }}
         </div>
         <div id="div_digg">
-            <div class="diggit action" >
-                <span class="diggnum" id="digg_count">1</span>
+            <div class="diggit action">
+                <span class="diggnum" id="digg_count">{{ article_obj.up_count }}</span>
             </div>
             <div class="buryit action">
-                <span class="burynum" id="bury_count">0</span>
+                <span class="burynum" id="bury_count">{{ article_obj.down_count }}</span>
             </div>
             <div class="clear"></div>
             <div class="diggword" id="digg_tips" style="color: red;"></div>
         </div>
         <script>
             $("#div_digg .action").click(function () {
-                var is_up=$(this).hasClass("diggit")
-                alert(is_up);
+                var is_up = $(this).hasClass("diggit")
+                $.ajax(
+                    {
+                        url: "/digg/",
+                        type: "post",
+                        data: {
+                            "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
+                            'is_up': is_up,
+                            "article_id": "{{ article_obj.pk }}",
+
+                        },
+                        success: function (data) {
+                            console.log(data);
+
+                            if (data.state){
+
+                            }else {
+                                if (data.handled){
+                                    $("#digg_tips").html("您已经推荐过")
+                                }else {
+                                    $("#digg_tips").html("您已经反对过过")
+                                }
+                                setTimeout(function () {
+                                    $("#digg_tips").html("")
+                                },1000)
+                            }
+                        }
+                    }
+                )
             })
         </script>
     </div>

@@ -31,6 +31,7 @@ urlpatterns = [
     re_path('^$', views.index),
     path('register/', views.register),
     path('logout/', views.logout),
+    path('digg/',views.digg),
 
 
 
