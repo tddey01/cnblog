@@ -199,7 +199,7 @@ def logout(request):
     return redirect("/blog/login/")
 
 
-def home_site(request, username,**kwargs):
+def home_site(request, username, **kwargs):
     '''
     个人站点 视图函数
     :param request:
@@ -222,7 +222,7 @@ def home_site(request, username,**kwargs):
     # 基于双线划线查询
     # models.Article.objects.filter(user=user)
     article_list = models.Article.objects.filter(user=user)
-    if  kwargs:
+    if kwargs:
         condition = kwargs.get("condition")
         param = kwargs.get("param")
         if condition == "category":
@@ -231,26 +231,26 @@ def home_site(request, username,**kwargs):
         elif condition == "tag":
             article_list = article_list.filter(tags__title=param)
         else:
-            year,month = param.split("-")
-            article_list = article_list.filter(create_time__year=year,create_time__month=month)
-
+            year, month = param.split("-")
+            article_list = article_list.filter(create_time__year=year, create_time__month=month)
 
     # # 每一个后的表模型.objects.values("pk").annotate(聚合函数(关联表__统计字段)).values("表模型的所有字段以及统计字段")
     #
     # # 查询每一个分类名称以及对应的文章数
-    #
-    ret=models.Category.objects.values("pk").annotate(c=Count("article__title")).values("title","c")
-    print(ret)
+    # #
+    # ret = models.Category.objects.values("pk").annotate(c=Count("article__title")).values("title", "c")
+    # print(ret)
     #
     # # 查询当前站点的每一个分类名称以及对应的文章数
     #
-    cate_list=models.Category.objects.filter(blog=blog).values("pk").annotate(c=Count("article__title")).values_list("title","c")
-    print(cate_list)
+    # cate_list = models.Category.objects.filter(blog=blog).values("pk").annotate(c=Count("article__title")).values_list(
+    #     "title", "c")
+    # print(cate_list)
     #
     # # 查询当前站点的每一个标签名称以及对应的文章数
     #
-    tag_list=models.Tag.objects.filter(blog=blog).values("pk").annotate(c=Count("article")).values_list("title","c")
-    print(tag_list)
+    # tag_list = models.Tag.objects.filter(blog=blog).values("pk").annotate(c=Count("article")).values_list("title", "c")
+    # print(tag_list)
     #
     # # 查询当前站点每一个年月的名称以及对应的文章数
     #
@@ -258,8 +258,10 @@ def home_site(request, username,**kwargs):
     # print(ret)
     #
     # # 方式1:
-    date_list=models.Article.objects.filter(user=user).extra(select={"y_m_date":"date_format(create_time,'%%Y/%%m')"}).values("y_m_date").annotate(c=Count("nid")).values_list("y_m_date","c")
-    print(date_list)
+    # date_list = models.Article.objects.filter(user=user).extra(
+    #     select={"y_m_date": "date_format(create_time,'%%Y/%%m')"}).values("y_m_date").annotate(
+    #     c=Count("nid")).values_list("y_m_date", "c")
+    # print(date_list)
     #
     # # 方式2:
     # #
@@ -269,10 +271,22 @@ def home_site(request, username,**kwargs):
     # # ret = models.Article.objects.first(user=user).annotate(month=TruncMonth("create_time")).values("month").annotate(c=Count("nid")).values_list("month","c")
     # # print("ret----->",ret)
 
+    # return render(request, "home_site.html", {"username": username, "blog": blog, "article_list": article_list, 'data_list': date_list}, )
+    return render(request, "home_site.html",{"username": username, "blog": blog, "article_list": article_list,}, )
 
-    return render(request, "home_site.html",{"username":username,"blog":blog,"article_list":article_list,'data_list':date_list},)
 
+# def get_callification_data(username):
+#     user = UserInfo.objects.filter(username=username).first()
+#     blog = user.blog
+#     cate_list = models.Category.objects.filter(blog=blog).values("pk").annotate(c=Count("article__title")).values_list( "title", "c")
+#     tag_list = models.Tag.objects.filter(blog=blog).values("pk").annotate(c=Count("article")).values_list("title", "c")
+#     date_list = models.Article.objects.filter(user=user).extra(select={"y_m_date": "date_format(create_time,'%%Y/%%m')"}).values("y_m_date").annotate(c=Count("nid")).values_list("y_m_date", "c")
+#
+#     return  {"blog":blog,"cate_list":cate_list,"tag_list":tag_list,"date_list":date_list}
 
-def article_detail(request,username,articel_id):
+def article_detail(request, username, articel_id):
+    user = UserInfo.objects.filter(username=username).first()
+    blog = user.blog
+    article_obj =models.Article.objects.filter(pk=articel_id).first()
 
-    return  render(request,"article_detail.html")
+    return render(request, "article_detail.html",locals())

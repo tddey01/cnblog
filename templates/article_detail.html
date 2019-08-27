@@ -1,1 +1,8 @@
 {% extends 'base.html' %}
+
+{% block content %}
+    <h4 class="text-center">{{ article_obj.title }}</h4>
+    <div class="cont">
+        {{ article_obj.content }}
+    </div>
+{% endblock %}
