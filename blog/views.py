@@ -275,15 +275,6 @@ def home_site(request, username, **kwargs):
     return render(request, "home_site.html",{"username": username, "blog": blog, "article_list": article_list,}, )
 
 
-# def get_callification_data(username):
-#     user = UserInfo.objects.filter(username=username).first()
-#     blog = user.blog
-#     cate_list = models.Category.objects.filter(blog=blog).values("pk").annotate(c=Count("article__title")).values_list( "title", "c")
-#     tag_list = models.Tag.objects.filter(blog=blog).values("pk").annotate(c=Count("article")).values_list("title", "c")
-#     date_list = models.Article.objects.filter(user=user).extra(select={"y_m_date": "date_format(create_time,'%%Y/%%m')"}).values("y_m_date").annotate(c=Count("nid")).values_list("y_m_date", "c")
-#
-#     return  {"blog":blog,"cate_list":cate_list,"tag_list":tag_list,"date_list":date_list}
-
 def article_detail(request, username, articel_id):
     user = UserInfo.objects.filter(username=username).first()
     blog = user.blog
