@@ -29,7 +29,7 @@
                             <a href=""># {{ forloop.counter }}楼</a> &nbsp;&nbsp;
                             <span>{{ comment.create_time|date:"Y-m-d H:i" }}</span>
                             <a href=""><span>{{ comment.user.username }}</span></a>
-                            <a href="" class="pull-right repley_btn">回复</a>
+                            <a href="" class="pull-right reply_btn" username="{{ request.user.username }}" content_pk="{{ comment.pk }}">回复</a>
                         </div>
                         <div class="comment_con">
                             <p>{{ comment.content }}</p>
@@ -91,8 +91,9 @@
                 })
             });
             //评论请求
+              var pid = ""
             $(".comment_btn").click(function () {
-                var pid = ""
+                //var pid = ""
                 var content = $("#content_content").val();
 
                 $.ajax({
@@ -102,7 +103,7 @@
                         "csrfmiddlewaretoken": $("[name = 'csrfmiddlewaretoken']").val(),
                         "article_id": "{{ article_obj.pk }}",
                         "commtent": content,
-                        "pid": pid,
+                        pid: pid,
                     },
                     success: function (data) {
                         console.log(data);
@@ -123,13 +124,20 @@
 
                         $("ul.comment_list").append(s);
                         //清空评论框
+                        pid = "",
                         $("#content_content").val("");
                     }})});
             // 回放按钮事件
-            $(".repley_btn").click(function () {
-                $("#content_content").focus();
+            $(".reply_btn").click(function () {
+
+                $('#content_content').focus();
+
                 var val = "@"+ $(this).attr("username") + "\n";
-                $("#content_content").val(val);
+
+                $('#content_content').val(val);
+
+
+                pid = $(this).attr('content_pk');
             })
 
 
