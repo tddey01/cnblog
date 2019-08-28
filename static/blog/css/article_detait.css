@@ -45,3 +45,16 @@
 .clear {
     clear: both;
 }
+
+
+input.author {
+    background-image: url("/static/font/icon_form.gif");
+    background-repeat: no-repeat;
+    border: 1px solid #ccc;
+    padding: 4px 4px 4px 30px;
+    width: 300px;
+    font-size: 13px;
+}
+.comment_con{
+    margin-top: 10px;
+}

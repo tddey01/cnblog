@@ -1,6 +1,4 @@
 from django.contrib import auth
-from django.db.models import Count
-from django.http import JsonResponse
 from django.shortcuts import HttpResponse, redirect, render
 
 from blog import models
@@ -280,6 +278,7 @@ def article_detail(request, username, articel_id):
     blog = user.blog
     article_obj = models.Article.objects.filter(pk=articel_id).first()
 
+    comtent_list = models.Comment.objects.filter(article_id=articel_id)
     return render(request, "article_detail.html", locals())
 
 
@@ -288,6 +287,7 @@ import json
 from django.db.models import F
 from django.http import JsonResponse
 
+
 def digg(request):
     print(request.POST)
 
@@ -295,7 +295,7 @@ def digg(request):
     # is_up = request.POST.get('is_up')  # 字符串 true
     is_up = json.loads(request.POST.get("is_up"))
     user_id = request.user.pk
-    response = {"state":True}
+    response = {"state": True}
     obj = models.ArticleUpDown.objects.filter(user_id=user_id, article_id=article_id).first()
     if not obj:
         queryset = models.Article.objects.filter(pk=article_id)
@@ -308,5 +308,20 @@ def digg(request):
         response["state"] = False
         response["handled"] = obj.is_up
 
+    return JsonResponse(response)
+
+
+def comment(request):
+    print(request.POST)
+    article_id = request.POST.get("article_id")
+    content = request.POST.get("commtent")
+    pid = request.POST.get("pid")
+    user_id = request.user.pk
+
+    comment_obj = models.Comment.objects.create(user_id=user_id,article_id=article_id,content=content,parent_comment_id=pid)
+    response = {}
+    response["create_time"] = comment_obj.create_time.strftime("%Y-%m-%d %H")
+    response["username"] = request.user.username
+    response["content"] = content
 
     return JsonResponse(response)

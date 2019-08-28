@@ -32,6 +32,7 @@ urlpatterns = [
     path('register/', views.register),
     path('logout/', views.logout),
     path('digg/',views.digg),
+    path('comment/', views.comment),
 
 
 
