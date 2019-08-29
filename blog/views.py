@@ -194,7 +194,7 @@ def register(request):
 
 def logout(request):
     auth.logout(request)  # 等同于执行 request.session.flush() 这个函数模块
-    return redirect("/blog/login/")
+    return redirect("/login/")
 
 
 def home_site(request, username, **kwargs):
@@ -278,7 +278,7 @@ def article_detail(request, username, articel_id):
     blog = user.blog
     article_obj = models.Article.objects.filter(pk=articel_id).first()
 
-    comtent_list = models.Comment.objects.filter(article_id=articel_id)
+    commtent_list = models.Comment.objects.filter(article_id=articel_id)
     return render(request, "article_detail.html", locals())
 
 
@@ -314,13 +314,13 @@ def digg(request):
 def comment(request):
     print(request.POST)
     article_id = request.POST.get("article_id")
-    content = request.POST.get("commtent")
+    content = request.POST.get("content")
     pid = request.POST.get("pid")
     user_id = request.user.pk
 
     comment_obj = models.Comment.objects.create(user_id=user_id,article_id=article_id,content=content,parent_comment_id=pid)
     response = {}
-    response["create_time"] = comment_obj.create_time.strftime("%Y-%m-%d %H")
+    response["create_time"] = comment_obj.create_time.strftime("%Y-%m-%d %X")
     response["username"] = request.user.username
     response["content"] = content
 
