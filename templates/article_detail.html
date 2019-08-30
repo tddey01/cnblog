@@ -23,6 +23,41 @@
         </div>
 
         <div class="comments list-group">
+            <p class="tree_btn">评书树</p>
+            <div class="comment_tree">
+                {#        动态获取数据#}
+
+            </div>
+            <script>
+                $('.tree_btn').click(function () {
+                    $.ajax({
+                        url: "/get_comment_tree/",
+                        type: 'get',
+                        data: {
+                            article_id: "{{ article_obj.pk }}",
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            $.each(data, function (index, comment_object) {
+                                var pk = comment_object.pk;
+                                var content = comment_object.content;
+                                var parent_comment_id = comment_object.parent_comment_id;
+                                var s = '<div  class="comment_item"  comment_id='+ pk +'><span>'+ content +'</span></div>';
+                                if (!parent_comment_id) {
+                                    {#var s = '<div  class="comment_item" comment_id='+ pk +'><span>'+ content +'</span></div>';#}
+
+                                    $('.comment_tree').append(s);
+                                } else {
+                                    {#var s = '<div  class="comment_item" comment_id='+ pk +'><span>'+ content +'</span></div>';#}
+                                    $("[comment_id ="+ parent_comment_id +"]").append(s);
+                                }
+                            })
+                        }
+                    })
+                });
+            </script>
+
+
             <p>评论列表</p>
             <ul class="list-group comment_list">
                 {% for comment in commtent_list %}

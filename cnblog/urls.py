@@ -33,6 +33,7 @@ urlpatterns = [
     path('logout/', views.logout),
     path('digg/',views.digg),
     path('comment/', views.comment),
+    path('get_comment_tree/', views.get_comment_tree),
 
 
 

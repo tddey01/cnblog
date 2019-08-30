@@ -55,6 +55,10 @@ input.author {
     width: 300px;
     font-size: 13px;
 }
-.comment_con{
+.comment_con {
     margin-top: 10px;
+}
+
+.comment_item {
+    margin-left: 20px;
 }

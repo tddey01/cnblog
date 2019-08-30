@@ -325,3 +325,12 @@ def comment(request):
     response["content"] = content
 
     return JsonResponse(response)
+
+def  get_comment_tree(request):
+    print(request.GET)
+    article_id =  request.GET.get('article_id')
+
+    ren =  list(models.Comment.objects.filter(article_id=article_id).values('pk', 'content', 'parent_comment'))
+    # [{},{},{}]
+
+    return JsonResponse(ren,safe=False)
