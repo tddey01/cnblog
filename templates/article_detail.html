@@ -34,7 +34,13 @@
                             <a class="pull-right reply_btn" username="{{ comment.user.username }}"
                                comment_pk="{{ comment.pk }}">回复</a>
                         </div>
-
+                        {% if comment.parent_comment_id %}
+                            <div class="pid_info well">
+                                <p>
+                                    {{ comment.parent_comment.user.username }}:{{ comment.parent_comment.content }}
+                                </p>
+                            </div>
+                        {% endif %}
 
                         <div class="comment_con">
                             <p>{{ comment.content }}</p>
@@ -90,15 +96,13 @@
 
             })
 
- //评论请求
+            //评论请求
             var pid = '';
 
 
             $(".comment_btn").click(function () {
-
                 var content = $("#comment_content").val();
-
-                if(pid){
+                if (pid) {
                     var index = content.indexOf("\n");
                     var content = content.slice(index + 1)
                 }
@@ -110,7 +114,7 @@
                         "csrfmiddlewaretoken": $("[name='csrfmiddlewaretoken']").val(),
                         "article_id": "{{ article_obj.pk }}",
                         "content": content,
-                         pid: pid
+                        pid: pid
                     },
                     success: function (data) {
                         console.log(data);
@@ -133,7 +137,8 @@
                         //清空评论框
                         pid = "",
                             $("#comment_content").val("");
-                    }})
+                    }
+                })
             });
 
 
