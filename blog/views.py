@@ -390,7 +390,7 @@ def add_article(request):
 
             print(tag.name)
             if tag.name == "script":
-                tag.decompose()
+                tag.decompose()  # 删除script标签
 
         # 构建摘要数据,获取标签字符串的文本前150个符号
 
