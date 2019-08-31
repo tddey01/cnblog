@@ -158,3 +158,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media') # 配置 media_root
 # 客户端访问 MEDIA_URL 路径
 
 MEDIA_URL = "/media/"
+
+
+EMAIL_HOST = 'smtp.exmail.qq.com'  # 如果是 163 改成 smtp.163.com
+EMAIL_PORT = 465
+EMAIL_HOST_USER = ''           # 帐号
+EMAIL_HOST_PASSWORD = ''  # 密码
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_USE_SSL = True

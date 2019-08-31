@@ -28,16 +28,15 @@
 
             </div>
             <script>
-                $('.tree_btn').click(function () {
-                    $.ajax({
+                $.ajax({
                         url: "/get_comment_tree/",
                         type: 'get',
                         data: {
                             article_id: "{{ article_obj.pk }}",
                         },
-                        success: function (data) {
-                            console.log(data);
-                            $.each(data, function (index, comment_object) {
+                        success: function (comment_list) {
+                            console.log(comment_list);
+                            $.each(comment_list, function (index, comment_object) {
                                 var pk = comment_object.pk;
                                 var content = comment_object.content;
                                 var parent_comment_id = comment_object.parent_comment_id;
@@ -54,7 +53,9 @@
                             })
                         }
                     })
-                });
+                //$('.tree_btn').click(function () {
+
+               // });
 
             </script>
 

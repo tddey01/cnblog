@@ -34,6 +34,8 @@ urlpatterns = [
     path('digg/',views.digg),
     path('comment/', views.comment),
     path('get_comment_tree/', views.get_comment_tree),
+    re_path("cn_backend/$",views.cn_backend),
+    re_path("cn_backend/add_article/$", views.add_article),
 
 
 
