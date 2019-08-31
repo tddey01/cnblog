@@ -113,7 +113,7 @@
                             <a href="/{{ article.user.username }}/"><img width="56" height="56" src="media/{{ article.user.avatar }}" alt=""></a>
                         </span>
                         <span class="media-right">
-                            {{ article.desc }}
+                            {{ article.desc |safe}}
                         </span>
                     </div>
                     <div class="small pub_info">
