@@ -5,8 +5,8 @@ from blog import models
 from blog.models import UserInfo
 from blog.myforms import UserForm
 from blog.utils import validCode
-
-
+import  os
+from cnblog import settings
 # Create your views here.
 
 
@@ -319,39 +319,43 @@ def comment(request):
     user_id = request.user.pk
     article_obj = models.Article.objects.filter(pk=article_id).first()
 
-    #事务操作
+    # 事务操作
     with transaction.atomic():
-        comment_obj = models.Comment.objects.create(user_id=user_id,article_id=article_id,content=content,parent_comment_id=pid)
+        comment_obj = models.Comment.objects.create(user_id=user_id, article_id=article_id, content=content,
+                                                    parent_comment_id=pid)
         # yuan
-        models.Article.objects.filter(pk=article_id).update(comment_count = F("comment_count") + 1)
+        models.Article.objects.filter(pk=article_id).update(comment_count=F("comment_count") + 1)
     response = {}
     response["create_time"] = comment_obj.create_time.strftime("%Y-%m-%d %X")
     response["username"] = request.user.username
     response["content"] = content
 
     from django.core.mail import send_mail
-    from cnblog import  settings
+    from cnblog import settings
 
-
-    import threading   #多线程发送邮件通知
-    t = threading.Thread(target=send_mail,args=("您的文章%s新增了一条评论内容"%article_obj.title,
-         content,
-        settings.EMAIL_HOST_USER,
-        ['88@qq.com'],))
+    import threading  # 多线程发送邮件通知
+    t = threading.Thread(target=send_mail, args=("您的文章%s新增了一条评论内容" % article_obj.title,
+                                                 content,
+                                                 settings.EMAIL_HOST_USER,
+                                                 ['88@qq.com'],))
     t.start()
     return JsonResponse(response)
 
-def  get_comment_tree(request):
-    print(request.GET)
-    article_id =  request.GET.get('article_id')
 
-    ren =  list(models.Comment.objects.filter(article_id=article_id).order_by('pk').values('pk', 'content', 'parent_comment'))
+def get_comment_tree(request):
+    print(request.GET)
+    article_id = request.GET.get('article_id')
+
+    ren = list(
+        models.Comment.objects.filter(article_id=article_id).order_by('pk').values('pk', 'content', 'parent_comment'))
     # [{},{},{}]
 
-    return JsonResponse(ren,safe=False)
+    return JsonResponse(ren, safe=False)
 
 
 from django.contrib.auth.decorators import login_required
+
+
 @login_required
 def cn_backend(request):
     """
@@ -379,18 +383,18 @@ def add_article(request):
         content = request.POST.get("content")
 
         # 防止xss攻击,过滤script标签
-        soup=BeautifulSoup(content,"html.parser")
+        soup = BeautifulSoup(content, "html.parser")
         for tag in soup.find_all():
 
             print(tag.name)
-            if tag.name=="script":
+            if tag.name == "script":
                 tag.decompose()
 
         # 构建摘要数据,获取标签字符串的文本前150个符号
 
-        desc=soup.text[0:150]+"..."
+        desc = soup.text[0:150] + "..."
 
-        models.Article.objects.create(title=title,desc=desc,content=str(soup), user=request.user)
+        models.Article.objects.create(title=title, desc=desc, content=str(soup), user=request.user)
         return redirect("/cn_backend/")
 
     return render(request, "backend/add_article.html")
@@ -404,15 +408,13 @@ def upload(request):
     """
 
     print(request.FILES)
-    img_obj=request.FILES.get("upload_img")
+    img_obj = request.FILES.get("upload_img")
     print(img_obj.name)
 
-    path=os.path.join(settings.MEDIA_ROOT,"add_article_img",img_obj.name)
+    path = os.path.join(settings.MEDIA_ROOT, "add_article_img", img_obj.name)
 
-    with open(path,"wb") as f:
-
+    with open(path, "wb") as f:
         for line in img_obj:
             f.write(line)
-
 
     return HttpResponse("ok")
