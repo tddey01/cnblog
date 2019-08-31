@@ -31,13 +31,12 @@ urlpatterns = [
     re_path('^$', views.index),
     path('register/', views.register),
     path('logout/', views.logout),
-    path('digg/',views.digg),
+    path('digg/', views.digg),
     path('comment/', views.comment),
     path('get_comment_tree/', views.get_comment_tree),
-    re_path("cn_backend/$",views.cn_backend),
+    re_path("cn_backend/$", views.cn_backend),
     re_path("cn_backend/add_article/$", views.add_article),
-
-
+    path('upload/', views.upload),
 
     # media 配置
     re_path(r"media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),

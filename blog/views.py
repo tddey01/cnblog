@@ -5,8 +5,10 @@ from blog import models
 from blog.models import UserInfo
 from blog.myforms import UserForm
 from blog.utils import validCode
-import  os
+import os
 from cnblog import settings
+
+
 # Create your views here.
 
 
@@ -417,4 +419,11 @@ def upload(request):
         for line in img_obj:
             f.write(line)
 
-    return HttpResponse("ok")
+    response = {
+        "error": 0,
+        "url": "/media/add_article_img/%s" % img_obj
+    }
+    import json
+
+    # return HttpResponse("ok")
+    return HttpResponse(json.dumps(response))
